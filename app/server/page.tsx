@@ -1,7 +1,7 @@
 import { Resident } from "@/types";
 import { getResidents } from "@/app/actions/residents";
 
-export async function Residents() {
+export default async function ResidentsPage() {
   const residents = await getResidents();
 
   return (

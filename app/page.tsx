@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Residents } from "./server/page";
+import ResidentsPage from "./server/page";
 import Link from "next/link";
 
 export default function Home() {
@@ -16,8 +16,7 @@ export default function Home() {
         </div>
 
         <Suspense fallback={<div>Loading...</div>}>
-          {/* @ts-expect-error Server Component */}
-          <Residents />
+          <ResidentsPage />
         </Suspense>
       </div>
     </div>
