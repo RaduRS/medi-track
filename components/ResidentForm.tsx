@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Resident } from "@/types";
 
 interface ResidentFormProps {
@@ -10,11 +11,17 @@ interface ResidentFormProps {
 
 export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     try {
       await onSubmit(formData);
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to save resident:", error);
+      alert("Failed to save resident. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -31,6 +38,7 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
           id="name"
           name="name"
           required
+          disabled={loading}
           defaultValue={initialData?.name}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
         />
@@ -45,6 +53,7 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
           id="roomNumber"
           name="roomNumber"
           required
+          disabled={loading}
           defaultValue={initialData?.roomNumber}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
         />
@@ -53,7 +62,7 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-blue-300 transition-colors"
       >
         {loading
           ? "Saving..."
