@@ -1,8 +1,7 @@
-import { Suspense } from "react";
 import ResidentsPage from "./server/page";
 import Link from "next/link";
 
-export default async function Home() {
+export default function Home() {
   return (
     <div className="min-h-screen p-8 sm:p-20">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -15,9 +14,8 @@ export default async function Home() {
           </Link>
         </div>
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <ResidentsPage />
-        </Suspense>
+        {/* @ts-expect-error Async Server Component */}
+        <ResidentsPage />
       </div>
     </div>
   );
