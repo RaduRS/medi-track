@@ -16,13 +16,16 @@ export async function createResident(
     });
 
     if (!result.insertedId) {
-      throw new Error("Failed to create resident");
+      return { success: false, error: "Failed to create resident" };
     }
 
-    return { success: true, id: result.insertedId };
+    return {
+      success: true,
+      id: result.insertedId.toString(),
+    };
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to create resident");
+    return { success: false, error: "Failed to create resident" };
   }
 }
 

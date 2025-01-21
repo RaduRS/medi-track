@@ -1,17 +1,16 @@
 import { ResidentForm } from "@/components/ResidentForm";
 import { createResident } from "@/app/actions/residents";
-import { redirect } from "next/navigation";
 
 export default function NewResidentPage() {
   async function handleSubmit(formData: FormData) {
     "use server";
 
-    await createResident({
+    const result = await createResident({
       name: formData.get("name") as string,
       roomNumber: Number(formData.get("roomNumber")),
     });
 
-    redirect("/");
+    return result;
   }
 
   return (

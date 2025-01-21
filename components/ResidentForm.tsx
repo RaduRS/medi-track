@@ -13,9 +13,12 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     setLoading(true);
+
     try {
+      const formData = new FormData(e.currentTarget);
       await onSubmit(formData);
       router.push("/");
       router.refresh();
@@ -28,7 +31,7 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
   }
 
   return (
-    <form action={handleSubmit} className="space-y-4 max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
       <div>
         <label htmlFor="name" className="block text-sm font-medium">
           Name
@@ -62,7 +65,7 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-blue-300 transition-colors"
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 disabled:bg-blue-300"
       >
         {loading
           ? "Saving..."
