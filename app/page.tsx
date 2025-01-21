@@ -14,7 +14,6 @@ export default function Home() {
           </Link>
         </div>
 
-        {/* @ts-expect-error Async Server Component */}
         <ResidentsPage />
       </div>
     </div>

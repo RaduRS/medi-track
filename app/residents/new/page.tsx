@@ -1,16 +1,61 @@
-import { ResidentForm } from "@/components/ResidentForm";
-import { createResident } from "@/app/actions/residents";
+"use client";
+
+import { ResidentForm } from "@/app/components/ResidentForm";
+import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/navigation";
+
+const CREATE_RESIDENT = gql`
+  mutation CreateResident(
+    $name: String!
+    $roomNumber: Int!
+    $status: ResidentStatus!
+  ) {
+    createResident(name: $name, roomNumber: $roomNumber, status: $status) {
+      id
+      name
+      roomNumber
+      status
+    }
+  }
+`;
+
+const GET_RESIDENTS = gql`
+  query GetResidents {
+    residents {
+      id
+      name
+      roomNumber
+    }
+  }
+`;
 
 export default function NewResidentPage() {
+  const router = useRouter();
+  const [createResident] = useMutation(CREATE_RESIDENT, {
+    refetchQueries: [{ query: GET_RESIDENTS }],
+    awaitRefetchQueries: true,
+  });
+
   async function handleSubmit(formData: FormData) {
-    "use server";
+    try {
+      const result = await createResident({
+        variables: {
+          name: formData.get("name") as string,
+          roomNumber: parseInt(formData.get("roomNumber") as string),
+          status: formData.get("status"),
+        },
+      });
 
-    const result = await createResident({
-      name: formData.get("name") as string,
-      roomNumber: Number(formData.get("roomNumber")),
-    });
-
-    return result;
+      if (result.data?.createResident) {
+        router.push("/");
+        return { success: true };
+      } else {
+        return { success: false, error: "Failed to create resident" };
+      }
+    } catch (error) {
+      console.error("Error creating resident:", error);
+      return { success: false, error: "Failed to create resident" };
+    }
   }
 
   return (

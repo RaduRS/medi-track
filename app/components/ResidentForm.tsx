@@ -21,6 +21,11 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
 
     try {
       const formData = new FormData(e.currentTarget);
+      // Add status to formData based on checkbox
+      formData.set(
+        "status",
+        formData.get("statusCheckbox") ? "ACTIVE" : "INACTIVE"
+      );
       const result = await onSubmit(formData);
 
       if (result?.success) {
@@ -67,6 +72,22 @@ export function ResidentForm({ initialData, onSubmit }: ResidentFormProps) {
           defaultValue={initialData?.roomNumber}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
         />
+      </div>
+
+      <div className="flex items-center space-x-2 border rounded-md p-3">
+        <input
+          type="checkbox"
+          id="statusCheckbox"
+          name="statusCheckbox"
+          defaultChecked={initialData?.status === "ACTIVE"}
+          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        />
+        <label
+          htmlFor="statusCheckbox"
+          className="text-sm font-medium text-gray-700"
+        >
+          Active Resident
+        </label>
       </div>
 
       <button
