@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import ResidentsPage from "./server/page";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="min-h-screen p-8 sm:p-20">
       <div className="max-w-4xl mx-auto space-y-6">
